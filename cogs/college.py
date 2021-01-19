@@ -36,6 +36,12 @@ class colleges(commands.Cog):
 		list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)) + "\n```")
 		await ctx.send(embed = list_embed)
 
+	@commands.command(aliases = ["k", "keywords", "keys"])
+	async def _keys(self, ctx):
+		list_embed = discord.Embed(title="List of Colleges", description="all keywords and corresponding colleges")
+		list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(f"[{key}]  :  {self.college_list[key]}" for key in self.college_list) + "\n```")
+		await ctx.send(embed = list_embed)
+
 	@commands.command(aliases = ["updateRole", "ur"])
 	async def _ur(self, ctx):
 		for i in self.college_list:
@@ -45,48 +51,62 @@ class colleges(commands.Cog):
 			else :
 				await ctx.send(f"{i} role exists")
 
-	@commands.command(aliases = ["college"])
-	async def _clg(self, ctx, clgid):
-		clgName = self.college_list[clgid]
-		for i in ctx.guild.roles:
-			if(clgName == i.name):
-				ctx.author.add_role(role=i)
-
 	@commands.command(aliases = ["addCollege", "ac"])
 	async def _add_college(self, ctx, *, prvt=""):
 		if prvt == "":
 			await ctx.channel.send("enter a valid role")
 			return
-		
-		if prvt in [r.name for r in ctx.guild.roles]:
-			await ctx.channel.send("role already exists")
 
-		self.college_list += [prvt]
-		role = await ctx.guild.create_role(name = prvt)
-		category = await ctx.guild.create_category(prvt)
+		role_name = prvt.split("|")[0][:-1]
+		nicknames = prvt.split("|")[1][1:].split()
+
+		if role_name in [r.name for r in ctx.guild.roles]:
+			await ctx.channel.send("role already exists")
+			return
+
+		self.college_list[role_name] = nicknames
+		role = await ctx.guild.create_role(name = role_name)
+		category = await ctx.guild.create_category(role_name)
 
 		await category.set_permissions(role, read_messages=True, send_messages=True, connect=True, speak=True)
 		await category.set_permissions(ctx.guild.default_role, read_messages=False, send_messages=False, connect=False, speak=False)
 
-		await ctx.guild.create_text_channel(prvt, category=category, sync_permissions=True)
-		await ctx.guild.create_voice_channel(prvt, category=category, sync_permissions=True)
+		await ctx.guild.create_text_channel(role_name, category=category, sync_permissions=True)
+		await ctx.guild.create_voice_channel(role_name, category=category, sync_permissions=True)
 
 		await ctx.send(f"private role, category and channels create for {role.mention}")
 
 	@commands.command(aliases = ["deleteCollege", "dc"])
-	async def _delete_college(self, ctx, role: discord.Role = None):
-		print(role)
+	async def _delete_college(self, ctx, *, role = None):
 		if role == None:
-			await ctx.channel.send("please mention a role")
+			await ctx.channel.send("Please mention a role")
+			return
+
+		try:
+			role = discord.utils.get(ctx.guild.roles, name=role)
+			await ctx.channel.send(f"**{role}** has been deleted")
+			await role.delete()
+		except:
+			await ctx.channel.send("invalid role")
 			return
 		
-		if role not in [r.name for r in ctx.guild.roles]:
-			await ctx.channel.send("invlaid role")
-			return
+		
 
-		role = discord.utils.get(ctx.guild.roles, name=role)
-		await ctx.channel.send(role)
+		await ctx.channel.send("checking for channels")
+		for chn in ctx.guild.channels:
+			if chn.name == role.name:
+				category = chn
+				break
 
+		for items in category.channels:
+			await ctx.send(f"channel name : **{items.name}** type : **{items.type}** has been deleted")
+			await items.delete()
+		
+		await ctx.send(f"channel name : **{category.name}** type : **{category.type}** has been deleted")
+		await category.delete()	
+			
+
+		
 
 def setup(client):
 	client.add_cog(colleges(client))
