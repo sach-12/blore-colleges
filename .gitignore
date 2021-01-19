@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 # dotenv
-secret.env
-clg.env
+*.env
