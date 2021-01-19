@@ -52,8 +52,16 @@ class colleges(commands.Cog):
 			if(clgName == i.name):
 				ctx.author.add_role(role=i)
 
-	@commands.command(aliases = ["testCategory", "tc", "make"])
-	async def _test(self, ctx, *, prvt):
+	@commands.command(aliases = ["addCollege", "ac"])
+	async def _add_college(self, ctx, *, prvt=""):
+		if prvt == "":
+			await ctx.channel.send("enter a valid role")
+			return
+		
+		if prvt in [r.name for r in ctx.guild.roles]:
+			await ctx.channel.send("role already exists")
+
+		self.college_list += [prvt]
 		role = await ctx.guild.create_role(name = prvt)
 		category = await ctx.guild.create_category(prvt)
 
@@ -64,6 +72,15 @@ class colleges(commands.Cog):
 		await ctx.guild.create_voice_channel(prvt, category=category, sync_permissions=True)
 
 		await ctx.send(f"private role, category and channels create for {role.mention}")
+
+	@commands.command(aliases = ["deleteCollege", "dc"])
+	async def _delete_college(self, ctx, role: discord.Role = None):
+		if role == None:
+			await ctx.channel.send("please mention a role")
+			return
+		
+		await ctx.channel.send(role)
+
 
 def setup(client):
 	client.add_cog(colleges(client))

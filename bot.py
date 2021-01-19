@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv('.env')
 TOKEN = os.getenv('DISCORD_TOKEN')
+
 client = commands.Bot(command_prefix="!", help_command=None)
 
 
