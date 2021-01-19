@@ -75,10 +75,16 @@ class colleges(commands.Cog):
 
 	@commands.command(aliases = ["deleteCollege", "dc"])
 	async def _delete_college(self, ctx, role: discord.Role = None):
+		print(role)
 		if role == None:
 			await ctx.channel.send("please mention a role")
 			return
 		
+		if role not in [r.name for r in ctx.guild.roles]:
+			await ctx.channel.send("invlaid role")
+			return
+
+		role = discord.utils.get(ctx.guild.roles, name=role)
 		await ctx.channel.send(role)
 
 
