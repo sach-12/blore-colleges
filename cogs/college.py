@@ -6,29 +6,29 @@ class colleges(commands.Cog):
 
 	def __init__(self, client):
 		self.client = client
-		self.college_list = ["PES University",
-			"National Institute of Engineering",
-			"MS Ramaiah University",
-			"IIIT Banglore",
-			"RV College",
-			"BMS College",
-			"RNS Institute of Technology",
-			"New Horizon College of Engineering",
-			"Dayananda Sagar University",
-			"Nitte Meenakshi Institute",
-			"BNM Institute",
-			"Banglore Institute",
-			"Oxford College of Engineering",
-			"Christ University",
-			"Reva University",
-			"Sir M Vishvesvaraya Institute",
-			"CMR University",
-			"JSS Academy of Technical Education",
-			"Dr. Ambedkar Institute",
-			"Presidency University",
-			"Jain University",
-			"SJBIT",
-			"Kammawari Sangha Institute"]
+		self.college_list = {"PES University" : ["pes", "pesit", "pesu"],
+			"National Institute of Engineering" : ["nie"],
+			"MS Ramaiah University" : ["msru"],
+			"IIIT Banglore" : ["iiitb"],
+			"RV College" : ["rv", "rvce"],
+			"BMS College" : ["bms", "bmsce"],
+			"RNS Institute of Technology" : ["rnsit", "rns"],
+			"New Horizon College of Engineering" : ["nhce"],
+			"Dayananda Sagar University" : ["ds", "dsu"],
+			"Nitte Meenakshi Institute" : ["nitte", "nittem", "nittemit", "nittemi"],
+			"BNM Institute" : ["bnm", "bnmi", "bnmit"],
+			"Banglore Institute" : ["bi"],
+			"Oxford College of Engineering" : ["oce", "oxford"],
+			"Christ University" : ["cu", "christ"],
+			"Reva University" : ["ru", "revau", "reva"],
+			"Sir M Vishvesvaraya Institute" : ["smvit", "smvi", "vit"],
+			"CMR University" : ["cmru", "cmr"],
+			"JSS Academy of Technical Education" : ["jss", "jssat", "jssate"],
+			"Dr. Ambedkar Institute" : ["ait", "dait", "dai", "da"],
+			"Presidency University" : ["presidency", "pu"],
+			"Jain University" : ["jain", "ju"],
+			"SJBIT" : ["sjbit"],		#kekw
+			"Kammawari Sangha Institute" : ["ksi", "ksit", "ks"]}
 	
 	@commands.command(aliases = ["list", "colleges", "l"])
 	async def _list(self, ctx):
@@ -52,6 +52,18 @@ class colleges(commands.Cog):
 			if(clgName == i.name):
 				ctx.author.add_role(role=i)
 
+	@commands.command(aliases = ["testCategory", "tc", "make"])
+	async def _test(self, ctx, *, prvt):
+		role = await ctx.guild.create_role(name = prvt)
+		category = await ctx.guild.create_category(prvt)
+
+		await category.set_permissions(role, read_messages=True, send_messages=True, connect=True, speak=True)
+		await category.set_permissions(ctx.guild.default_role, read_messages=False, send_messages=False, connect=False, speak=False)
+
+		await ctx.guild.create_text_channel(prvt, category=category, sync_permissions=True)
+		await ctx.guild.create_voice_channel(prvt, category=category, sync_permissions=True)
+
+		await ctx.send(f"private role, category and channels create for {role.mention}")
 
 def setup(client):
 	client.add_cog(colleges(client))
