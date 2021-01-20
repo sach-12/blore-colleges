@@ -72,12 +72,19 @@ class colleges(commands.Cog):
 		category = await ctx.guild.create_category(role_name)
 
 		await category.set_permissions(role, read_messages=True, connect=True)
-		await category.set_permissions(dyno, view_chaneel=True, send_messages=True)
+		await category.set_permissions(dyno, view_channel=True, send_messages=True)
 		await category.set_permissions(muted, send_messages=False, speak=False)
-		await category.set_permissions(nqn, view_chaneel=True)
-		await category.set_permissions(ctx.guild.default_role, view_chaneel=False)
+		await category.set_permissions(nqn, view_channel=True)
+		await category.set_permissions(ctx.guild.default_role, view_channel=False)
 
-		await ctx.guild.create_text_channel(role_name, category=category, sync_permissions=True)
+		announcements_overwrites={
+			role: discord.PermissionOverwrite(send_messages=False, view_channel=True),
+			ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False)
+		}
+
+		await ctx.guild.create_text_channel('general', category=category, sync_permissions=True)
+		await ctx.guild.create_text_channel('events', category=category, sync_permissions=True, slowmode_delay=60)
+		await ctx.guild.create_text_channel('announcements', overwrites=announcements_overwrites, category=category, sync_permissions=False)
 		await ctx.guild.create_voice_channel(role_name, category=category, sync_permissions=True)
 
 		await ctx.send(f"private role, category and channels create for {role.mention}")
