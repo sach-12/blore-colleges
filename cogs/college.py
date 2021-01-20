@@ -66,10 +66,16 @@ class colleges(commands.Cog):
 
 		self.college_list[role_name] = nicknames
 		role = await ctx.guild.create_role(name = role_name)
+		muted = discord.utils.get(ctx.guild.roles, name="Muted")
+		nqn = discord.utils.get(ctx.guild.roles, name="Not Quite Nitro")
+		dyno = discord.utils.get(ctx.guild.roles, name="Dyno")
 		category = await ctx.guild.create_category(role_name)
 
-		await category.set_permissions(role, read_messages=True, send_messages=True, connect=True, speak=True)
-		await category.set_permissions(ctx.guild.default_role, read_messages=False, send_messages=False, connect=False, speak=False)
+		await category.set_permissions(role, read_messages=True, connect=True)
+		await category.set_permissions(dyno, view_chaneel=True, send_messages=True)
+		await category.set_permissions(muted, send_messages=False, speak=False)
+		await category.set_permissions(nqn, view_chaneel=True)
+		await category.set_permissions(ctx.guild.default_role, view_chaneel=False)
 
 		await ctx.guild.create_text_channel(role_name, category=category, sync_permissions=True)
 		await ctx.guild.create_voice_channel(role_name, category=category, sync_permissions=True)
