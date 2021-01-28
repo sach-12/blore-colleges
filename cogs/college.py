@@ -116,8 +116,24 @@ class colleges(commands.Cog):
 			await items.delete()
 		
 		await ctx.send(f"channel name : **{category.name}** type : **{category.type}** has been deleted")
-		await category.delete()	
-			
+		await category.delete()
+
+	@commands.command(aliases = ['accept'])
+	async def _verify(self, ctx):
+		await ctx.channel.send("Good job. Lastly tell which college you're from")
+		msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
+		msg = str(msg.content)
+		for i in self.college_list.keys():
+			for j in i:
+				if(j == msg):
+					print(i)
+					print(j)
+					# await ctx.channel.send(f"college found.\n{i}")
+				# role_str = self.college_list.items().i
+				# await ctx.author.add_roles(discord.utils)	
+				else:
+					await ctx.channel.send("nope we don't got it")
+					return
 
 		
 
