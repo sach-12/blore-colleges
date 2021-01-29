@@ -6,8 +6,8 @@ import os
 class colleges(commands.Cog):
 
     def __init__(self, client):
-    	self.client = client
-    	self.college_list = {"PES University": ["pes", "pesit", "pesu"],
+        self.client = client
+        self.college_list = {"PES University": ["pes", "pesit", "pesu"],
                              "National Institute of Engineering": ["nie"],
                              "MS Ramaiah University": ["msru"],
                              "IIIT Banglore": ["iiitb"],
@@ -31,13 +31,13 @@ class colleges(commands.Cog):
                              "SJBIT": ["sjbit"],  # kekw
                              "Kammawari Sangha Institute": ["ksi", "ksit", "ks"]}
 
-
-	@commands.command(aliases = ["list", "colleges", "l"])
-	async def _list(self, ctx):
-		list_embed = discord.Embed(title="List of Colleges", description="all keywords and corresponding colleges")
-		list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
-			f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)) + "\n```")
-        await ctx.send(embed=list_embed)
+        @commands.command(aliases=["list", "colleges", "l"])
+        async def _list(self, ctx):
+            list_embed = discord.Embed(
+                title="List of Colleges", description="all keywords and corresponding colleges")
+            list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
+                f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)) + "\n```")
+            await ctx.send(embed=list_embed)
 
     @commands.command(aliases=["k", "keywords", "keys"])
     async def _keys(self, ctx):
@@ -81,13 +81,14 @@ class colleges(commands.Cog):
         await category.set_permissions(dyno, view_channel=True, send_messages=True)
         await category.set_permissions(muted, send_messages=False, speak=False)
         await category.set_permissions(nqn, view_channel=True)
-		await category.set_permissions(namma_bot, view_channel=True)
-		await category.set_permissions(ctx.guild.default_role, view_channel=False)
+        await category.set_permissions(namma_bot, view_channel=True)
+        await category.set_permissions(ctx.guild.default_role, view_channel=False)
 
         announcements_overwrites = {
             role: discord.PermissionOverwrite(send_messages=False, view_channel=True),
-			namma_bot: discord.PermissionOverwrite(view_channel=True),
-            ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False)
+            namma_bot: discord.PermissionOverwrite(view_channel=True),
+            ctx.guild.default_role: discord.PermissionOverwrite(
+                view_channel=False)
         }
 
         await ctx.guild.create_text_channel('general', category=category, sync_permissions=True)
@@ -142,7 +143,7 @@ class colleges(commands.Cog):
                     return
                 # role_str = self.college_list.items().i
                 # await ctx.author.add_roles(discord.utils)
-			await ctx.channel.send("nope we don't got it")
+                    await ctx.channel.send("nope we don't got it")
 
 
 def setup(client):
