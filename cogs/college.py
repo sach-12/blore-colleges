@@ -2,80 +2,80 @@ import discord
 from discord.ext import commands
 import os
 
+BOT_LOGS = 801322661899796501
+
 
 class colleges(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self.college_list = {"PES University": ["pes", "pesit", "pesu"],
-                             "National Institute of Engineering": ["nie"],
-                             "MS Ramaiah University": ["msru"],
-                             "IIIT Banglore": ["iiitb"],
-                             "RV College": ["rv", "rvce"],
-                             "BMS College": ["bms", "bmsce"],
-                             "RNS Institute of Technology": ["rnsit", "rns"],
-                             "New Horizon College of Engineering": ["nhce"],
-                             "Dayananda Sagar University": ["ds", "dsu"],
-                             "Nitte Meenakshi Institute": ["nitte", "nittem", "nittemit", "nittemi"],
-                             "BNM Institute": ["bnm", "bnmi", "bnmit"],
-                             "Banglore Institute": ["bi"],
-                             "Oxford College of Engineering": ["oce", "oxford"],
-                             "Christ University": ["cu", "christ"],
-                             "Reva University": ["ru", "revau", "reva"],
-                             "Sir M Vishvesvaraya Institute": ["smvit", "smvi", "vit"],
-                             "CMR University": ["cmru", "cmr"],
-                             "JSS Academy of Technical Education": ["jss", "jssat", "jssate"],
-                             "Dr. Ambedkar Institute": ["ait", "dait", "dai", "da"],
-                             "Presidency University": ["presidency", "pu"],
-                             "Jain University": ["jain", "ju"],
-                             "SJBIT": ["sjbit"],  # kekw
-                             "Kammawari Sangha Institute": ["ksi", "ksit", "ks"]}
+        self.college_list = {
+            "PES University" : ["pes", "pesit", "pesu", "pesuecc", "pes university"],
+            "MS Ramaiah Institute of Technology": ["msrit", "rit", "ms ramaiah institute of technology"],
+            "MS Ramaiah University": ["msru", "ruas"],
+            "IIIT Bangalore": ["iiitb", "iiit bangalore", "iiitb bengaluru"],
+            "RV College": ["rv", "rvce", "rv college of engineering", "rvitm", "rvit", "rv institute of technology", "rv institute of technology and management"],
+            "BMS College": ["bms", "bmsce", "bms college of engineering", "bmsit", "bms institute of technology"],
+            "RNS Institute of Technology": ["rnsit", "rns", "rns institute of technology"],
+            "New Horizon College of Engineering": ["nhce", "new horizon",  "new horizon college of engineering"],
+            "Dayananda Sagar": ["ds", "dsu", "dayandanda sagar", "dayananda sagar university","dsit"],
+            "Nitte Meenakshi Institute of Technology": ["nitte", "nittem", "nittemit", "nittemi", "nitte meenakshi institute of technology", "nmit"],
+            "BNM Institute": ["bnm", "bnmi", "bnmit", "bnm institute"],
+            "Banglore Institute of Technology": ["bi", "bit", "banglore institute of technology"],
+            "Oxford College of Engineering": ["oce", "oxford", "oxford college of engineering"],
+            "Christ University": ["cu", "christ", "christ university"],
+            "Reva University": ["ru", "revau", "reva", "reva university"],
+            "Sir M Vishvesvaraya Institute of Technology": ["smvit", "smvi", "vit", "sir m vishvesvaraya institute of technology"],
+            "CMR University": ["cmru", "cmr", "cmr university"],
+            "CMR Institute of Technology": ["cmrit", "cmr institute of technology"],
+            "JSS Academy of Technical Education": ["jss", "jssat", "jssate", "jss academy of technical education"],
+            "Dr. Ambedkar Institute of Technology": ["ait", "dait", "dai", "da", "drait", "dr ambedkar institute of technology"],
+            "Presidency University": ["presidency", "pu", "presidency university"],
+            "Jain University": ["jain", "ju", "jain university"],
+            "SJBIT": ["sjbit", "sjb institute of technology"],
+            "Kammawari Sangha Institute OF Technology": ["ksi", "ksit", "ks", "kammawari sangha institute of technology"],
+            "Indian Institute of Science": ["iis", "iisc", "indian institute of science"],
+            "Acharya Institute of Technology": ["acharya", "ait", "acharya institute of technology"],
+            "AMC Engineering College": ["amc", "amcu", "amc engineering college"],
+            "Rajarajeshwari College of Engineering": ["rit", "rajarajeshwari college of engineering"],
+            "Global Academy of Technology": ["gat", "global academy of technology"],
+            "JSS Science and Technology University": ["jss", "jssst", "jss university", "jce", "jss science and technology university"],
+            "National Institute of Engineering": ["nie", "national institute of engineering"],
+            "National Institute of Technology Surathkal": ["nit", "nits", "nitk", "nit surathkal", "national institute of technology surathkal"],
+            "Manipal Academy of Higher Education": ["manipal", "manipal university", "mahe", "manipal academy of higher education"],
+            "Indian Institute of Technology Dharwad": ["iit", "iit dharwad", "iitd", "indian institute of technology dharwad"]
+            }
+    
 
-        @commands.command(aliases=["list", "colleges", "l"])
-        async def _list(self, ctx):
-            list_embed = discord.Embed(
-                title="List of Colleges", description="all keywords and corresponding colleges")
-            list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
-                f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)) + "\n```")
-            await ctx.send(embed=list_embed)
-
-    @commands.command(aliases=["k", "keywords", "keys"])
-    async def _keys(self, ctx):
+    @commands.command(aliases = ['list', 'colleges', 'l'])
+    async def _list(self, ctx):
         list_embed = discord.Embed(
-            title="List of Colleges", description="all keywords and corresponding colleges")
+            title="List of colleges", description='All keywords and corresponding colleges'
+        )
         list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
-            f"[{key}]  :  {self.college_list[key]}" for key in self.college_list) + "\n```")
-        await ctx.send(embed=list_embed)
+            f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)
+        ) + "\n```")
+        await ctx.channel.send(embed=list_embed)
 
-    @commands.command(aliases=["updateRole", "ur"])
-    async def _ur(self, ctx):
-        for i in self.college_list:
-            if not i in [r.name for r in ctx.guild.roles]:
-                await ctx.guild.create_role(name=i)
-                await ctx.send(f"{i} role added")
-            else:
-                await ctx.send(f"{i} role exists")
-
-    @commands.command(aliases=["addCollege", "ac"])
-    async def _add_college(self, ctx, *, prvt=""):
-        if prvt == "":
-            await ctx.channel.send("enter a valid role")
+    
+    @commands.command(aliases = ['ac', 'addcollege'])
+    async def _add_college(self, ctx, *clg):
+        clg=list(clg)
+        clg=" ".join(clg)
+        if clg == "":
+            await ctx.channel.send("Enter a valid role")
             return
-
-        role_name = prvt.split("|")[0][:-1]
-        nicknames = prvt.split("|")[1][1:].split()
-
-        if role_name in [r.name for r in ctx.guild.roles]:
-            await ctx.channel.send("role already exists")
+        
+        if clg in [r.name for r in ctx.guild.roles]:
+            await ctx.channel.send("Role already exists")
             return
-
-        self.college_list[role_name] = nicknames
-        role = await ctx.guild.create_role(name=role_name)
+        
+        role = await ctx.guild.create_role(name=clg)
         muted = discord.utils.get(ctx.guild.roles, name="Muted")
         nqn = discord.utils.get(ctx.guild.roles, name="Not Quite Nitro")
         dyno = discord.utils.get(ctx.guild.roles, name="Dyno")
         namma_bot = discord.utils.get(ctx.guild.roles, name="Namma Bot")
-        category = await ctx.guild.create_category(role_name)
+        category = await ctx.guild.create_category(clg)
 
         await category.set_permissions(role, read_messages=True, connect=True)
         await category.set_permissions(dyno, view_channel=True, send_messages=True)
@@ -84,67 +84,65 @@ class colleges(commands.Cog):
         await category.set_permissions(namma_bot, view_channel=True)
         await category.set_permissions(ctx.guild.default_role, view_channel=False)
 
-        announcements_overwrites = {
-            role: discord.PermissionOverwrite(send_messages=False, view_channel=True),
-            namma_bot: discord.PermissionOverwrite(view_channel=True),
-            ctx.guild.default_role: discord.PermissionOverwrite(
-                view_channel=False)
-        }
-
-        await ctx.guild.create_text_channel('general', category=category, sync_permissions=True)
+        await ctx.guild.create_text_channel('lobby', category=category, sync_permissions=True)
         await ctx.guild.create_text_channel('events', category=category, sync_permissions=True, slowmode_delay=60)
-        await ctx.guild.create_text_channel('announcements', overwrites=announcements_overwrites, category=category, sync_permissions=False)
-        await ctx.guild.create_voice_channel(role_name, category=category, sync_permissions=True)
+        await ctx.guild.create_voice_channel('general', category=category, sync_permissions=True)
 
-        await ctx.send(f"private role, category and channels create for {role.mention}")
+        await self.client.get_channel(BOT_LOGS).send(f"Private role, category and channels created for {role.mention}")
 
-    @commands.command(aliases=["deleteCollege", "dc"])
+
+    @commands.command(aliases = ['deleteCollege', 'dc'])
     async def _delete_college(self, ctx, *, role=None):
-        if role == None:
-            await ctx.channel.send("Please mention a role")
+        if ((role == None)):
+            await ctx.channel.send("Please mention a valid role")
             return
-
+        
         try:
             role = discord.utils.get(ctx.guild.roles, name=role)
-            await ctx.channel.send(f"**{role}** has been deleted")
             await role.delete()
+            await ctx.channel.send(f"**{role}** has been deleted")
         except:
-            await ctx.channel.send("invalid role")
+            await ctx.channel.send("Invalid role")
             return
 
-        await ctx.channel.send("checking for channels")
+        await ctx.channel.send("Checking for channels...")
         for chn in ctx.guild.channels:
             if chn.name == role.name:
                 category = chn
                 break
-
+        
         for items in category.channels:
-            await ctx.send(f"channel name : **{items.name}** type : **{items.type}** has been deleted")
             await items.delete()
+            await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been deleted")
 
-        await ctx.send(f"channel name : **{category.name}** type : **{category.type}** has been deleted")
         await category.delete()
+        await ctx.channel.send(f"channel name  :  **{category.name}** type  :  **{category.type}** has been deleted")
 
-    @commands.command(aliases=['accept'])
+
+    @commands.command(aliases = ['accept'])
     async def _verify(self, ctx):
-        await ctx.channel.send("Good job. Lastly tell which college you're from")
+        await ctx.channel.send("Good job. Lastly, tell us which college you're from")
         msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
         msg = str(msg.content)
-        msg = msg.title()
-        print(msg)
+        msg = msg.lower()
+        # print(msg)
         for i in self.college_list.keys():
-            print(i)
+            # print(i)
             college_alias = self.college_list.get(i)
-            print(college_alias)
+            # print(college_alias)
             for j in college_alias:
-                j = j.title()
+                # j = j.title()
                 if(j == msg):
-                    await ctx.channel.send(f"college found.\n{i}")
+                    await ctx.channel.send(f"College found\n{i}")
+                    role = discord.utils.get(ctx.guild.roles, name = i)
+                    await ctx.author.add_roles(role)
+                    masala_dosa = discord.utils.get(ctx.guild.roles, name = "Masala Dosa")
+                    await ctx.author.add_roles(masala_dosa)
                     return
-                # role_str = self.college_list.items().i
-                # await ctx.author.add_roles(discord.utils)
-                    await ctx.channel.send("nope we don't got it")
+        await ctx.channel.send("nope we don't got it")
 
 
 def setup(client):
     client.add_cog(colleges(client))
+
+        
