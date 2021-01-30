@@ -19,5 +19,10 @@ class server(commands.Cog):
     async def _gomma(self, ctx):
         await ctx.channel.send(":tengue_fold:")
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        justjoined_role = discord.utils.get(member.guild.roles, name="Just Joined")
+        await member.add_roles(justjoined_role)
+
 def setup(client):
     client.add_cog(server(client))

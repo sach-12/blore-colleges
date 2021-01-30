@@ -138,6 +138,8 @@ class colleges(commands.Cog):
                     await ctx.author.add_roles(role)
                     masala_dosa = discord.utils.get(ctx.guild.roles, name = "Masala Dosa")
                     await ctx.author.add_roles(masala_dosa)
+                    justjoined_role = discord.utils.get(ctx.author.guild.roles, name="Just Joined")
+                    await ctx.author.remove_roles(justjoined_role)
                     return
         await ctx.channel.send("nope we don't got it")
 
