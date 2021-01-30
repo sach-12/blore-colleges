@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import os
+from time import sleep
 
 BOT_LOGS = 801322661899796501
 
@@ -119,29 +120,32 @@ class colleges(commands.Cog):
         await ctx.channel.send(f"channel name  :  **{category.name}** type  :  **{category.type}** has been deleted")
 
 
-    @commands.command(aliases = ['accept'])
+    @commands.command(aliases = ['accept', 'Accept'])
     async def _verify(self, ctx):
-        await ctx.channel.send("Good job. Lastly, tell us which college you're from")
-        msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
-        msg = str(msg.content)
-        msg = msg.lower()
-        # print(msg)
-        for i in self.college_list.keys():
-            # print(i)
-            college_alias = self.college_list.get(i)
-            # print(college_alias)
-            for j in college_alias:
-                # j = j.title()
-                if(j == msg):
-                    await ctx.channel.send(f"College found\n{i}")
-                    role = discord.utils.get(ctx.guild.roles, name = i)
-                    await ctx.author.add_roles(role)
-                    masala_dosa = discord.utils.get(ctx.guild.roles, name = "Masala Dosa")
-                    await ctx.author.add_roles(masala_dosa)
-                    justjoined_role = discord.utils.get(ctx.author.guild.roles, name="Just Joined")
-                    await ctx.author.remove_roles(justjoined_role)
-                    return
-        await ctx.channel.send("nope we don't got it")
+        verified = discord.utils.get(ctx.guild.roles, name = "Idly Vada")
+        if(verified in ctx.author.roles):
+            await ctx.channel.send("You've already chosen a college. Don't try to scam me you naughty little....")
+            return
+        else:
+            await ctx.channel.send("I hope you went through those rules. Tell me which college you're from and I'll give you access to the server.\nOh I can understand abbreviated college names too!!")
+            msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
+            msg = str(msg.content)
+            msg = msg.lower()
+            bot_parents = discord.utils.get(ctx.guild.roles, name="Bot parents")
+            for i in self.college_list.keys():
+                college_alias = self.college_list.get(i)
+                for j in college_alias:
+                    if(j == msg):
+                        await ctx.channel.send(f"I gotcha fam. You now have access to {str(i)}'s college specific channels. Enjoy your stay!")
+                        role = discord.utils.get(ctx.guild.roles, name = i)
+                        sleep(4)
+                        await ctx.author.add_roles(role)
+                        await ctx.author.add_roles(verified)
+                        justjoined_role = discord.utils.get(ctx.author.guild.roles, name="Just Joined")
+                        await ctx.author.remove_roles(justjoined_role)
+                        await ctx.channel.purge(limit=4)
+                        return
+            await ctx.channel.send(f"Never heard of the place. Lemme call my masters {bot_parents.mention}")
 
 
 def setup(client):
