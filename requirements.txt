@@ -1,0 +1,4 @@
+python-dotenv==0.15.0
+discord==1.0.1
+discord.py==1.5.1
+time==1.0.0
