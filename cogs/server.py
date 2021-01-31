@@ -17,7 +17,7 @@ class server(commands.Cog):
         await self.client.get_channel(BOT_LOGS).send(f"Bot is online : {self.client.user}")
         guildObj = self.client.get_guild(800581401324945428)
         self.just_joined = get(guildObj.roles, id=805084725710422026)
-        
+
         # self.admin = get(guildObj.roles, id=801312470928326676)
         # self.mods = get(guildObj.roles, id=800581837772292116)
         # self.bot_devs = get(guildObj.roles, id=804705156452188221)
@@ -68,7 +68,7 @@ class server(commands.Cog):
 
     @commands.command(aliases=['gomma', 'ungamman'])
     async def _gomma(self, ctx):
-        await ctx.channel.send(":tengue_fold:")
+        await ctx.channel.send("why ma")
 
 
     @commands.Cog.listener()
