@@ -6,10 +6,24 @@ from time import sleep
 BOT_LOGS = 801322661899796501
 
 
+
+
 class colleges(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        guildObj = self.client.get_guild(800581401324945428)
+        self.admin = discord.utils.get(guildObj.roles, id = 801312470928326676)
+        self.mods = discord.utils.get(guildObj.roles, id = 800581837772292116)
+        self.bot_devs = discord.utils.get(guildObj.roles, id = 804705156452188221)
+        self.namma_bot = discord.utils.get(guildObj.roles, id = 804742810049445938)
+        self.verified = discord.utils.get(guildObj.roles, id = 805151093310750761)
+        self.just_joined = discord.utils.get(guildObj.roles, id = 805084725710422026)
+        self.muted = discord.utils.get(guildObj.roles, id = 801295084754567169)
+        self.dyno = discord.utils.get(guildObj.roles, id = 800947868742713344)
+        self.nqn = discord.utils.get(guildObj.roles, id = 800753707246551111)
+        self.tatsu = discord.utils.get(guildObj.roles, id = 801320838824853565)
+        self.everyone_role = discord.utils.get(guildObj.default_role)
         self.college_list = {
             "PES University" : ["pes", "pesit", "pesu", "pesuecc", "pes university"],
             "MS Ramaiah Institute of Technology": ["msrit", "rit", "ms ramaiah institute of technology"],
@@ -72,18 +86,15 @@ class colleges(commands.Cog):
             return
         
         role = await ctx.guild.create_role(name=clg)
-        muted = discord.utils.get(ctx.guild.roles, name="Muted")
-        nqn = discord.utils.get(ctx.guild.roles, name="Not Quite Nitro")
-        dyno = discord.utils.get(ctx.guild.roles, name="Dyno")
-        namma_bot = discord.utils.get(ctx.guild.roles, name="Namma Bot")
         category = await ctx.guild.create_category(clg)
 
         await category.set_permissions(role, read_messages=True, connect=True)
-        await category.set_permissions(dyno, view_channel=True, send_messages=True)
-        await category.set_permissions(muted, send_messages=False, speak=False)
-        await category.set_permissions(nqn, view_channel=True)
-        await category.set_permissions(namma_bot, view_channel=True)
-        await category.set_permissions(ctx.guild.default_role, view_channel=False)
+        await category.set_permissions(self.dyno, view_channel=True, send_messages=True)
+        await category.set_permissions(self.muted, send_messages=False, speak=False)
+        await category.set_permissions(self.nqn, view_channel=True)
+        await category.set_permissions(self.namma_bot, view_channel=True)
+        await category.set_permissions(self.tatsu, view_channel=True, send_message=False)
+        await category.set_permissions(self.everyone_role, view_channel=False)
 
         await ctx.guild.create_text_channel('lobby', category=category, sync_permissions=True)
         await ctx.guild.create_text_channel('events', category=category, sync_permissions=True, slowmode_delay=60)
@@ -122,8 +133,7 @@ class colleges(commands.Cog):
 
     @commands.command(aliases = ['accept', 'Accept'])
     async def _verify(self, ctx):
-        verified = discord.utils.get(ctx.guild.roles, name = "Idly Vada")
-        if(verified in ctx.author.roles):
+        if(self.verified in ctx.author.roles):
             await ctx.channel.send("You've already chosen a college. Don't try to scam me you naughty little....")
             return
         else:
@@ -131,7 +141,6 @@ class colleges(commands.Cog):
             msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
             msg = str(msg.content)
             msg = msg.lower()
-            bot_parents = discord.utils.get(ctx.guild.roles, name="Bot parents")
             for i in self.college_list.keys():
                 college_alias = self.college_list.get(i)
                 for j in college_alias:
@@ -140,12 +149,11 @@ class colleges(commands.Cog):
                         role = discord.utils.get(ctx.guild.roles, name = i)
                         sleep(4)
                         await ctx.author.add_roles(role)
-                        await ctx.author.add_roles(verified)
-                        justjoined_role = discord.utils.get(ctx.author.guild.roles, name="Just Joined")
-                        await ctx.author.remove_roles(justjoined_role)
+                        await ctx.author.add_roles(self.verified)
+                        await ctx.author.remove_roles(self.just_joined)
                         await ctx.channel.purge(limit=4)
                         return
-            await ctx.channel.send(f"Never heard of the place. Lemme call my masters {bot_parents.mention}")
+            await ctx.channel.send(f"Never heard of the place. Lemme call my masters {self.bot_devs.mention}")
 
 
 def setup(client):

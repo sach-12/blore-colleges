@@ -7,6 +7,8 @@ class server(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        guildObj = self.client.get_guild(800581401324945428)
+        self.just_joined = discord.utils.get(guildObj.roles, id = 805084725710422026)
 
     #events
     @commands.Cog.listener()
@@ -21,8 +23,7 @@ class server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        justjoined_role = discord.utils.get(member.guild.roles, name="Just Joined")
-        await member.add_roles(justjoined_role)
+        await member.add_roles(self.just_joined)
 
 def setup(client):
     client.add_cog(server(client))
