@@ -2,30 +2,17 @@ import discord
 from discord.ext import commands
 import os
 from time import sleep
+from discord.utils import get
 
 BOT_LOGS = 801322661899796501
-
-
 
 
 class colleges(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        guildObj = self.client.get_guild(800581401324945428)
-        self.admin = discord.utils.get(guildObj.roles, id = 801312470928326676)
-        self.mods = discord.utils.get(guildObj.roles, id = 800581837772292116)
-        self.bot_devs = discord.utils.get(guildObj.roles, id = 804705156452188221)
-        self.namma_bot = discord.utils.get(guildObj.roles, id = 804742810049445938)
-        self.verified = discord.utils.get(guildObj.roles, id = 805151093310750761)
-        self.just_joined = discord.utils.get(guildObj.roles, id = 805084725710422026)
-        self.muted = discord.utils.get(guildObj.roles, id = 801295084754567169)
-        self.dyno = discord.utils.get(guildObj.roles, id = 800947868742713344)
-        self.nqn = discord.utils.get(guildObj.roles, id = 800753707246551111)
-        self.tatsu = discord.utils.get(guildObj.roles, id = 801320838824853565)
-        self.everyone_role = discord.utils.get(guildObj.default_role)
         self.college_list = {
-            "PES University" : ["pes", "pesit", "pesu", "pesuecc", "pes university"],
+            "PES University": ["pes", "pesit", "pesu", "pesuecc", "pes university"],
             "MS Ramaiah Institute of Technology": ["msrit", "rit", "ms ramaiah institute of technology"],
             "MS Ramaiah University": ["msru", "ruas"],
             "IIIT Bangalore": ["iiitb", "iiit bangalore", "iiitb bengaluru"],
@@ -33,7 +20,7 @@ class colleges(commands.Cog):
             "BMS College": ["bms", "bmsce", "bms college of engineering", "bmsit", "bms institute of technology"],
             "RNS Institute of Technology": ["rnsit", "rns", "rns institute of technology"],
             "New Horizon College of Engineering": ["nhce", "new horizon",  "new horizon college of engineering"],
-            "Dayananda Sagar": ["ds", "dsu", "dayandanda sagar", "dayananda sagar university","dsit"],
+            "Dayananda Sagar": ["ds", "dsu", "dayandanda sagar", "dayananda sagar university", "dsit"],
             "Nitte Meenakshi Institute of Technology": ["nitte", "nittem", "nittemit", "nittemi", "nitte meenakshi institute of technology", "nmit"],
             "BNM Institute": ["bnm", "bnmi", "bnmit", "bnm institute"],
             "Banglore Institute of Technology": ["bi", "bit", "banglore institute of technology"],
@@ -59,10 +46,29 @@ class colleges(commands.Cog):
             "National Institute of Technology Surathkal": ["nit", "nits", "nitk", "nit surathkal", "national institute of technology surathkal"],
             "Manipal Academy of Higher Education": ["manipal", "manipal university", "mahe", "manipal academy of higher education"],
             "Indian Institute of Technology Dharwad": ["iit", "iit dharwad", "iitd", "indian institute of technology dharwad"]
-            }
-    
+        }
 
-    @commands.command(aliases = ['list', 'colleges', 'l'])
+    @commands.Cog.listener()
+    async def on_ready(self):
+        await self.client.wait_until_ready()
+        guildObj = self.client.get_guild(800581401324945428)
+        self.admin = get(guildObj.roles, id=801312470928326676)
+        self.mods = get(guildObj.roles, id=800581837772292116)
+        self.bot_devs = get(
+            guildObj.roles, id=804705156452188221)
+        self.namma_bot = get(
+            guildObj.roles, id=804742810049445938)
+        self.verified = get(
+            guildObj.roles, id=805151093310750761)
+        self.just_joined = get(
+            guildObj.roles, id=805084725710422026)
+        self.muted = get(guildObj.roles, id=801295084754567169)
+        self.dyno = get(guildObj.roles, id=800947868742713344)
+        self.nqn = get(guildObj.roles, id=800753707246551111)
+        self.tatsu = get(guildObj.roles, id=801320838824853565)
+        self.everyone_role = get(guildObj.default_role)
+
+    @commands.command(aliases=['list', 'colleges', 'l'])
     async def _list(self, ctx):
         list_embed = discord.Embed(
             title="List of colleges", description='All keywords and corresponding colleges'
@@ -72,19 +78,18 @@ class colleges(commands.Cog):
         ) + "\n```")
         await ctx.channel.send(embed=list_embed)
 
-    
-    @commands.command(aliases = ['ac', 'addcollege'])
+    @commands.command(aliases=['ac', 'addcollege'])
     async def _add_college(self, ctx, *clg):
-        clg=list(clg)
-        clg=" ".join(clg)
+        clg = list(clg)
+        clg = " ".join(clg)
         if clg == "":
             await ctx.channel.send("Enter a valid role")
             return
-        
+
         if clg in [r.name for r in ctx.guild.roles]:
             await ctx.channel.send("Role already exists")
             return
-        
+
         role = await ctx.guild.create_role(name=clg)
         category = await ctx.guild.create_category(clg)
 
@@ -102,13 +107,12 @@ class colleges(commands.Cog):
 
         await self.client.get_channel(BOT_LOGS).send(f"Private role, category and channels created for {role.mention}")
 
-
-    @commands.command(aliases = ['deleteCollege', 'dc'])
+    @commands.command(aliases=['deleteCollege', 'dc'])
     async def _delete_college(self, ctx, *, role=None):
         if ((role == None)):
             await ctx.channel.send("Please mention a valid role")
             return
-        
+
         try:
             role = discord.utils.get(ctx.guild.roles, name=role)
             await role.delete()
@@ -122,7 +126,7 @@ class colleges(commands.Cog):
             if chn.name == role.name:
                 category = chn
                 break
-        
+
         for items in category.channels:
             await items.delete()
             await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been deleted")
@@ -130,8 +134,7 @@ class colleges(commands.Cog):
         await category.delete()
         await ctx.channel.send(f"channel name  :  **{category.name}** type  :  **{category.type}** has been deleted")
 
-
-    @commands.command(aliases = ['accept', 'Accept'])
+    @commands.command(aliases=['accept', 'Accept'])
     async def _verify(self, ctx):
         if(self.verified in ctx.author.roles):
             await ctx.channel.send("You've already chosen a college. Don't try to scam me you naughty little....")
@@ -146,7 +149,7 @@ class colleges(commands.Cog):
                 for j in college_alias:
                     if(j == msg):
                         await ctx.channel.send(f"I gotcha fam. You now have access to {str(i)}'s college specific channels. Enjoy your stay!")
-                        role = discord.utils.get(ctx.guild.roles, name = i)
+                        role = discord.utils.get(ctx.guild.roles, name=i)
                         sleep(4)
                         await ctx.author.add_roles(role)
                         await ctx.author.add_roles(self.verified)
@@ -158,5 +161,3 @@ class colleges(commands.Cog):
 
 def setup(client):
     client.add_cog(colleges(client))
-
-        
