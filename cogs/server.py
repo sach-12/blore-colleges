@@ -63,9 +63,7 @@ class server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        await self.client.get_channel(BOT_LOGS).send(f"{member.mention} joined")
-        just_joined = get(member.guild.roles, id=805084725710422026)
-        await member.add_roles(just_joined)
+        await member.add_roles(self.just_joined)
 
 
     @commands.command(aliases=['gomma', 'ungamman'])
