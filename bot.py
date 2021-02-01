@@ -6,13 +6,14 @@ from dotenv import load_dotenv
 
 load_dotenv('.env')
 TOKEN = os.getenv('DISCORD_TOKEN')
+intents = discord.Intents().all()
 
 
 BOT_LOGS = 801322661899796501
 VERI_CHANNEL = 804368803319250954
 
 
-client = commands.Bot(command_prefix="+", help_command=None)
+client = commands.Bot(command_prefix="+", help_command=None, intent=intents)
 
 
 @client.command(aliases = ['loadit'])
