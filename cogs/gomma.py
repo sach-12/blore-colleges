@@ -10,21 +10,20 @@ class gomma(commands.Cog):
     async def _help(self, ctx):
         #botcommand : [[aliases for the bot], 'brief desc', 'example]
         dic = {
-            "help": [['`help`', '`h`'], 'get help from the bot on available commands', '`+help`'],
-            "ping": [['`ping`'], 'find the latency of the bot', '`+ping`'],
-            "count roles": [['`c`', '`count`'], 'count the number of people with the given role', '`+count Bots`'],
-            "find college": [['`accept`'], 'find your college to get access to exclusive college based channels, and then type clg name ', '`+accept` and then after bot promts `PES`']
+            "Help": [['`help`', '`h`'], 'Get help from the bot on available commands', '`+help`\n\u200b'],
+            "Ping": [['`Ping`'], 'Find the latency of the bot', '`+Ping`\n\u200b'],
+            "Count roles": [['`c`', '`count`'], 'Count the number of people with the given role', '`+count Bots`\n\u200b']
         }
-        output = discord.Embed(title="Commands", color=0xff00ff)
+        output = discord.Embed(title="Commands", color=0x379316)
         for cmd in dic:
             commandVal = dic[cmd][0]
             st = ', '.join(commandVal)
-            output.add_field(name = cmd, value = st + '\n' + dic[cmd][1] +'\nEg:' + dic[cmd][2])
+            output.add_field(name = cmd, value = st + '\n' + dic[cmd][1] +'\nEg:' + dic[cmd][2], inline = False)
         output.set_footer(text = "The bot prefix is `+`")
         await ctx.send(embed=output)
     
-    @commands.command(aliases=['ping'])
-    async def ping(self, ctx):
+    @commands.command(aliases=['Ping'])
+    async def _ping(self, ctx):
         await ctx.send("Pong!!!\n" + str(round(self.client.latency * 1000)) + "ms")
 
     @commands.command(aliases=['c', 'count'])
@@ -50,7 +49,6 @@ class gomma(commands.Cog):
             for roles in roleName:
                 thisRole.append(discord.utils.get(ctx.guild.roles, name=roles))
             for guild in self.client.guilds:
-                await ctx.send("Currently in "+str(guild))
                 count = 0
                 for member in guild.members:
                     boolean = True
