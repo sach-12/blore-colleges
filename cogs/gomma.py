@@ -6,7 +6,23 @@ class gomma(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-
+    @commands.command(aliases=['help'])
+    async def _help(self, ctx):
+        #botcommand : [[aliases for the bot], 'brief desc', 'example]
+        dic = {
+            "help": [['`help`', '`h`'], 'get help from the bot on available commands', '`+help`'],
+            "ping": [['`ping`'], 'find the latency of the bot', '`+ping`'],
+            "count roles": [['`c`', '`count`'], 'count the number of people with the given role', '`+count Bots`'],
+            "find college": [['`accept`'], 'find your college to get access to exclusive college based channels, and then type clg name ', '`+accept` and then after bot promts `PES`']
+        }
+        output = discord.Embed(title="Commands", color=0xff00ff)
+        for cmd in dic:
+            commandVal = dic[cmd][0]
+            st = ', '.join(commandVal)
+            output.add_field(name = cmd, value = st + '\n' + dic[cmd][1] +'\nEg:' + dic[cmd][2])
+        output.set_footer(text = "The bot prefix is `+`")
+        await ctx.send(embed=output)
+    
     @commands.command(aliases=['ping'])
     async def ping(self, ctx):
         await ctx.send("Pong!!!\n" + str(round(self.client.latency * 1000)) + "ms")

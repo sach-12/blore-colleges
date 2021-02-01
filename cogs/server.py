@@ -74,6 +74,7 @@ class server(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         string = str(error)
+        await ctx.send(string)
         await self.client.get_channel(BOT_LOGS).send(string)
         await self.client.get_channel(BOT_LOGS).send(f"{ctx.message.author.mention} made this error in {ctx.message.channel.mention}")
 
