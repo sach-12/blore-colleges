@@ -13,7 +13,7 @@ BOT_LOGS = 801322661899796501
 VERI_CHANNEL = 804368803319250954
 
 
-client = commands.Bot(command_prefix="+", help_command=None, intent=intents)
+client = commands.Bot(command_prefix="+", help_command=None, intents=intents)
 
 
 @client.command(aliases = ['loadit'])
