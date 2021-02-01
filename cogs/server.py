@@ -15,19 +15,19 @@ class server(commands.Cog):
     async def on_ready(self):
         await self.client.wait_until_ready()
         await self.client.get_channel(BOT_LOGS).send(f"Bot is online : {self.client.user}")
-        guildObj = self.client.get_guild(800581401324945428)
-        self.just_joined = get(guildObj.roles, id=805084725710422026)
+        self.guildObj = self.client.get_guild(800581401324945428)
+        self.just_joined = get(self.guildObj.roles, id=805084725710422026)
 
-        # self.admin = get(guildObj.roles, id=801312470928326676)
-        # self.mods = get(guildObj.roles, id=800581837772292116)
-        # self.bot_devs = get(guildObj.roles, id=804705156452188221)
-        # self.bot_children = get(guildObj.roles, id = 805028812520685598)
-        # self.dbc = get(guildObj.roles, id = 805106749857071104)
-        # self.biryani = get(guildObj.roles, id = 805106710179479584)
-        # self.bbb = get(guildObj.roles, id = 805321969117560853)
-        # self.masala_dosa = get(guildObj.roles, id = 805106647290478602)
-        # self.idli_vada = get(guildObj.roles, id = 805453201704484896)
-        # self.bots = get(guildObj.roles, id = 804364008945221693)
+        # self.admin = get(self.guildObj.roles, id=801312470928326676)
+        # self.mods = get(self.guildObj.roles, id=800581837772292116)
+        # self.bot_devs = get(self.guildObj.roles, id=804705156452188221)
+        # self.bot_children = get(self.guildObj.roles, id = 805028812520685598)
+        # self.dbc = get(self.guildObj.roles, id = 805106749857071104)
+        # self.biryani = get(self.guildObj.roles, id = 805106710179479584)
+        # self.bbb = get(self.guildObj.roles, id = 805321969117560853)
+        # self.masala_dosa = get(self.guildObj.roles, id = 805106647290478602)
+        # self.idli_vada = get(self.guildObj.roles, id = 805453201704484896)
+        # self.bots = get(self.guildObj.roles, id = 804364008945221693)
         # self.roless = self.client.get_channel(804707604122566676)
         # self.veri = self.client.get_channel(804368803319250954)
         
@@ -63,6 +63,7 @@ class server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        self.just_joined = get(self.guildObj.roles, id=805084725710422026)
         await member.add_roles(self.just_joined)
 
 

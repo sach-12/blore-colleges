@@ -70,9 +70,11 @@ class colleges(commands.Cog):
         list_embed = discord.Embed(
             title="List of colleges", description='All keywords and corresponding colleges'
         )
-        list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
-            f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)
-        ) + "\n```")
+        # list_embed.add_field(name=f"{len(self.college_list)} Colleges", value="```css\n"+"\n\n".join(
+        #     f"[{str(key).zfill(2)}]  :  {val}" for key, val in enumerate(self.college_list)
+        # ) + "\n```")
+        for clg in self.college_list:
+            list_embed.add_field(name = clg, value = "```{}```".format(', '.join(self.college_list[clg])))
         await ctx.channel.send(embed=list_embed)
 
     @commands.command(aliases=['ac', 'addcollege'])
