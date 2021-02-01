@@ -7,7 +7,7 @@ RULES_CHANNEL = 804369125014503426
 
 class server(commands.Cog):
 
-    def __init__(self, client, member):
+    def __init__(self, client):
         self.client = client
 
     # events
@@ -63,6 +63,7 @@ class server(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        print("i'm on")
         await self.client.get_channel(BOT_LOGS).send(f"{member.mention} joined")
         just_joined = get(member.guild.roles, id=805084725710422026)
         await member.add_roles(just_joined)
