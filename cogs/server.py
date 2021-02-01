@@ -9,7 +9,6 @@ class server(commands.Cog):
 
     def __init__(self, client, member):
         self.client = client
-        self.member = member
 
     # events
     @commands.Cog.listener()
@@ -63,10 +62,10 @@ class server(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_join(self):
-        await self.client.get_channel(BOT_LOGS).send(f"{self.member.mention} joined")
-        just_joined = get(self.member.guild.roles, id=805084725710422026)
-        await self.member.add_roles(just_joined)
+    async def on_member_join(self, member):
+        await self.client.get_channel(BOT_LOGS).send(f"{member.mention} joined")
+        just_joined = get(member.guild.roles, id=805084725710422026)
+        await member.add_roles(just_joined)
 
 
     @commands.command(aliases=['gomma', 'ungamman'])
