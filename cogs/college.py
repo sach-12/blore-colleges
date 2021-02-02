@@ -46,7 +46,9 @@ class colleges(commands.Cog):
             "National Institute of Technology Surathkal": ["nit", "nits", "nitk", "nit surathkal", "national institute of technology surathkal"],
             "Manipal Academy of Higher Education": ["manipal", "manipal university", "mahe", "manipal academy of higher education"],
             "Indian Institute of Technology Dharwad": ["iit", "iit dharwad", "iitd", "indian institute of technology dharwad"],
-            "Transcend College": ["transcend", "tgi", "transcend college", "transcend group of institutions"]
+            "Transcend College": ["transcend", "tgi", "transcend college", "transcend group of institutions"],
+            "MVJ College of Engineering": ["mvjce", "mvj college of engineering", "mvj"],
+            "Cambridge Institute": ["cambridge institute", "cit", "cambridge institute of technology"]
         }
 
     @commands.Cog.listener()
