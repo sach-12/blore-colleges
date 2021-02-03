@@ -27,4 +27,4 @@ Under no circumstances is anyone, apart from sach-12, Flab-E, ArvindAroo and AB-
 
 1. Create a new branch called `beta-(discord-username)`
 2. Do whatever changes you wish to do and create a pull request with the following information furnished in the request message: "The cog you wish to change | What did you change"
-3. Wait for approval for reviewers. your PR may be directly accepted o requested for further changes
+3. Wait for approval for reviewers. your PR may be directly accepted or requested for further changes
