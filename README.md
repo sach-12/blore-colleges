@@ -11,8 +11,8 @@ To clone this repo using git CLI, run the following command:
 
 git clone https://github.com/sach-12/blore-colleges/
 
-Under no circumstances is anyone, apart from sach-12, Flab-E, ArvindAroo and AB-Law, allowed to commit their changes to the main branch. If you wish to contribute to the bot, run these steps:
+If you wish to contribute to the bot, run these steps:
 
-1. Commit to the "development-beta" branch
+1. Commit to the "development-beta" branch or create your own branch. You must make sure that your branch is even with the main or else the pull request will be rejected
 2. Create a pull request with the following information furnished in the request message: "The cog you wish to change | What did you change"
 3. Wait for approval
