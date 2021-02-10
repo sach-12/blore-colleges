@@ -149,11 +149,11 @@ class colleges(commands.Cog):
             await ctx.channel.send("You've already chosen a college. Don't try to scam me you naughty little....")
             return
         else:
-            await ctx.channel.send("I hope you went through those rules. Tell me which college you're from and I'll give you access to the server.\nOh I can understand abbreviated college names too!!")
+            await ctx.channel.send("I hope you went through those rules. Tell me which college you're from and I'll give you access to the server.\nPreferably the full name")
             msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
             msg = str(msg.content)
             await ctx.channel.send("I gotcha fam. One of the mods will get you a college role within 24 hours. Welcome to the server and enjoy your stay!")
-            sleep(4)
+            sleep(5)
             await ctx.author.add_roles(self.verified)
             await ctx.author.remove_roles(self.just_joined)
             await ctx.channel.purge(limit=4)
