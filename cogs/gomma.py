@@ -61,5 +61,37 @@ class gomma(commands.Cog):
             await ctx.send(str(count) + " people has role " + str(thisRole))
 
 
+    # @commands.command(aliases=['migrate'])
+    # async def _migrate(self, ctx, categoryint, roleint):
+    #     if(self.admin in ctx.author.roles):
+    #         category = ctx.guild.get_channel(int(categoryint))
+    #         # print(category)
+    #         new_category = ctx.guild.get_channel(808902926033879040)
+    #         # print(new_category)
+    #         role = get(ctx.guild.roles, id=int(roleint))
+    #         # print(role)
+    #         overwrites = {
+    #                 role: discord.PermissionOverwrite(view_channel=True, connect=True),
+    #                 self.dyno: discord.PermissionOverwrite(view_channel=True, send_messages=True),
+    #                 self.muted: discord.PermissionOverwrite(send_messages=False, speak=False),
+    #                 self.nqn: discord.PermissionOverwrite(view_channel=True),
+    #                 self.namma_bot: discord.PermissionOverwrite(view_channel=True),
+    #                 self.atlas: discord.PermissionOverwrite(view_channel=True, send_messages=False),
+    #                 ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False, create_instant_invite=False)
+    #             }
+    #         for items in category.channels:
+    #             if items.name == 'lobby':
+    #                 await items.edit(name=role.name, category=new_category, sync_permissions=False, overwrites=overwrites)
+    #                 await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been moved")
+    #             else:
+    #                 await items.delete()
+    #                 await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been deleted")
+    #         await category.delete()
+    #         await ctx.channel.send(f"channel name  :  **{category.name}** type  :  **{category.type}** has been deleted")
+        
+    #     else:
+    #         await ctx.channel.send("Unauthorised")
+
+
 def setup(client):
     client.add_cog(gomma(client))

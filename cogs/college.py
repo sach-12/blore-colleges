@@ -5,6 +5,8 @@ from time import sleep
 from discord.utils import get
 
 BOT_LOGS = 801322661899796501
+COLLEGE_LOGS = 808892040321695754
+COLLEGES_CATEGORY = 808902926033879040
 
 
 class colleges(commands.Cog):
@@ -64,7 +66,7 @@ class colleges(commands.Cog):
         self.muted = get(guildObj.roles, id=801295084754567169)
         self.dyno = get(guildObj.roles, id=800947868742713344)
         self.nqn = get(guildObj.roles, id=800753707246551111)
-        self.tatsu = get(guildObj.roles, id=801320838824853565)
+        self.atlas = get(guildObj.roles, id=808681096240955433)
         # self.everyone_role = get(guildObj.default_role)
 
 
@@ -84,7 +86,7 @@ class colleges(commands.Cog):
     async def _add_college(self, ctx, *clg):
         clg = list(clg)
         clg = " ".join(clg)
-        if (self.bot_devs in ctx.author.roles):
+        if ((self.bot_devs in ctx.author.roles) or (self.mods in ctx.author.roles)):
             if clg == "":
                 await ctx.channel.send("Enter a valid role")
                 return
@@ -94,21 +96,21 @@ class colleges(commands.Cog):
                 return
 
             role = await ctx.guild.create_role(name=clg)
-            category = await ctx.guild.create_category(clg)
+            category = ctx.guild.get_channel(COLLEGES_CATEGORY)
+            overwrites = {
+                role: discord.PermissionOverwrite(view_channel=True, connect=True),
+                self.dyno: discord.PermissionOverwrite(view_channel=True, send_messages=True),
+                self.muted: discord.PermissionOverwrite(send_messages=False, speak=False),
+                self.nqn: discord.PermissionOverwrite(view_channel=True),
+                self.namma_bot: discord.PermissionOverwrite(view_channel=True),
+                self.atlas: discord.PermissionOverwrite(view_channel=True, send_messages=False),
+                ctx.guild.default_role: discord.PermissionOverwrite(view_channel=False, create_instant_invite=False)
+            }
 
-            await category.set_permissions(role, read_messages=True, connect=True)
-            await category.set_permissions(self.dyno, view_channel=True, send_messages=True)
-            await category.set_permissions(self.muted, send_messages=False, speak=False)
-            await category.set_permissions(self.nqn, view_channel=True)
-            await category.set_permissions(self.namma_bot, view_channel=True)
-            await category.set_permissions(self.tatsu, view_channel=True, send_messages=False)
-            await category.set_permissions(ctx.guild.default_role, view_channel=False, create_instant_invite=False)
+            await ctx.guild.create_text_channel(clg, category=category, sync_permissions=False, overwrites=overwrites)
 
-            await ctx.guild.create_text_channel('lobby', category=category, sync_permissions=True)
-            await ctx.guild.create_text_channel('events', category=category, sync_permissions=True, slowmode_delay=60)
-            await ctx.guild.create_voice_channel('general', category=category, sync_permissions=True)
-
-            await self.client.get_channel(BOT_LOGS).send(f"Private role, category and channels created for {role.mention}")
+            await ctx.channel.send(f"Private role and channel created for {role.mention}")
+            await self.client.get_channel(BOT_LOGS).send(f"Private role and channel created for {role.mention}")
         
         else:
             await ctx.channel.send("You are not authorised to do that")
@@ -129,17 +131,12 @@ class colleges(commands.Cog):
                 return
 
             await ctx.channel.send("Checking for channels...")
-            for chn in ctx.guild.channels:
-                if chn.name == role.name:
-                    category = chn
-                    break
+            category = ctx.guild.get_channel(COLLEGES_CATEGORY)
 
             for items in category.channels:
-                await items.delete()
-                await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been deleted")
-
-            await category.delete()
-            await ctx.channel.send(f"channel name  :  **{category.name}** type  :  **{category.type}** has been deleted")
+                if(items.name == str(role.name).lower().replace(" ", "-")):
+                    await items.delete()
+                    await ctx.channel.send(f"channel name  :  **{items.name}** type  :  **{items.type}** has been deleted")
 
             await self.client.get_channel(BOT_LOGS).send(f"**{role}** has been deleted")
         
@@ -155,20 +152,13 @@ class colleges(commands.Cog):
             await ctx.channel.send("I hope you went through those rules. Tell me which college you're from and I'll give you access to the server.\nOh I can understand abbreviated college names too!!")
             msg = await self.client.wait_for("message", check=lambda msg: msg.author == ctx.author)
             msg = str(msg.content)
-            msg = msg.lower()
-            for i in self.college_list.keys():
-                college_alias = self.college_list.get(i)
-                for j in college_alias:
-                    if(j == msg):
-                        await ctx.channel.send(f"I gotcha fam. You now have access to {str(i)}'s college specific channels. Enjoy your stay!")
-                        role = discord.utils.get(ctx.guild.roles, name=i)
-                        sleep(4)
-                        await ctx.author.add_roles(role)
-                        await ctx.author.add_roles(self.verified)
-                        await ctx.author.remove_roles(self.just_joined)
-                        await ctx.channel.purge(limit=4)
-                        return
-            await ctx.channel.send(f"Never heard of the place. Try again.\nIf you still can't get in, do ping Bot parents")
+            await ctx.channel.send("I gotcha fam. One of the mods will get you a college role within 24 hours. Welcome to the server and enjoy your stay!")
+            sleep(4)
+            await ctx.author.add_roles(self.verified)
+            await ctx.author.remove_roles(self.just_joined)
+            await ctx.channel.purge(limit=4)
+            await self.client.get_channel(COLLEGE_LOGS).send(f"{ctx.author.mention}  :  {msg}")
+
 
 
 def setup(client):
